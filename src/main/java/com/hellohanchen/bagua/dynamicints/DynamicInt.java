@@ -2,6 +2,9 @@ package com.hellohanchen.bagua.dynamicints;
 
 import com.hellohanchen.bagua.GameObject;
 import com.hellohanchen.bagua.interfaces.ICopy;
+import com.hellohanchen.baguaserver.entity.GameStatus;
+import com.hellohanchen.baguaserver.entity.GameStatus.IntData;
+
 import java.lang.Math;
 
 /**
@@ -71,19 +74,19 @@ public abstract class DynamicInt implements ICopy<DynamicInt> {
     }
 
     /* Value status */
-    public Boolean IsEnhanced() {
+    public Boolean isEnhanced() {
         return getCurrentValue() > originalValue;
     }
 
-    public Boolean IsImpaired() {
+    public Boolean isImpaired() {
         return getCurrentValue() < originalValue;
     }
 
-    public Boolean IsEnhanced(GameObject activator) {
+    public Boolean isEnhanced(GameObject activator) {
         return getCurrentValue(activator) > originalValue;
     }
 
-    public Boolean IsImpaired(GameObject activator) {
+    public Boolean isImpaired(GameObject activator) {
         return getCurrentValue(activator) < originalValue;
     }
 
@@ -105,6 +108,10 @@ public abstract class DynamicInt implements ICopy<DynamicInt> {
     @Override
     public String toString() {
         return String.valueOf(getCurrentValue());
+    }
+
+    public IntData asData() {
+        return new IntData(getCurrentValue(), isEnhanced(), isImpaired());
     }
 
     /* Setters */

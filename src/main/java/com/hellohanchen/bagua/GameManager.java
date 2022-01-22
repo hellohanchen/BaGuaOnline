@@ -28,6 +28,8 @@ import com.hellohanchen.bagua.statics.GameUtils;
 import com.hellohanchen.bagua.target.TargetType;
 import com.hellohanchen.bagua.visitors.BoolConstraintChecker;
 import com.hellohanchen.bagua.visitors.EffectExecutor;
+import com.hellohanchen.baguaserver.entity.GameId;
+import com.hellohanchen.baguaserver.entity.GameStatus;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -49,7 +51,7 @@ public class GameManager {
      * Each round would have 4 different stages. start -> playing -> end -> postEnd
      * In each stage, player can make action or some events might be triggered.
      */
-    protected enum State {
+    public enum State {
         Init,  // state for setting up networking stuff
         Setup,  // state for setting up game logic and objects
         Start,  // round start
@@ -71,9 +73,12 @@ public class GameManager {
 
     /* Game Objects */
     @Getter
+    private final GameId id;
+    @Getter
     private final Player player1;
     @Getter
     private final Player player2;
+
     private final ObjectManager objects;
 
     /* Game Status */
@@ -95,6 +100,7 @@ public class GameManager {
     private final List<ICarrier<Aura>> auraCarriers = new ArrayList<>();
 
     public GameManager(String name1, String name2) {
+        this.id = new GameId(name1, name2);
         this.player1 = new Player(name1);
         this.player2 = new Player(name2);
         this.player1.setOpponent(this.player2);
@@ -758,5 +764,30 @@ public class GameManager {
 
     public int lastCharacterId() {
         return characterCounter;
+    }
+
+    // TODO: track game status/cache game status
+    public GameStatus getStatus() {
+        GameStatus status = new GameStatus();
+
+        status.setPlayer1(player1.getName());
+        status.setPlayer2(player2.getName());
+        status.setState(currentState);
+
+        status.setP1Pocket(
+                getCardHolder(player1).getCards().stream().map(Card::asData).toList());
+        status.setP2Pocket(
+                getCardHolder(player2).getCards().stream().map(Card::asData).toList());
+        status.setP1Library(getCardHolder(player1).libraryCount());
+        status.setP2Library(getCardHolder(player2).libraryCount());
+
+        status.setP1Characters(
+                getDomain(player1).getOccupiedCharacters(false)
+                        .stream().map(Character::asData).toList());
+        status.setP2Characters(
+                getDomain(player2).getOccupiedCharacters(false)
+                        .stream().map(Character::asData).toList());
+
+        return status;
     }
 }

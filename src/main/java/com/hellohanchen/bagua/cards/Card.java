@@ -5,6 +5,7 @@ import com.hellohanchen.bagua.Player;
 import com.hellohanchen.bagua.effects.Effect;
 import com.hellohanchen.bagua.enums.CardType;
 import com.hellohanchen.bagua.interfaces.ICopy;
+import com.hellohanchen.baguaserver.entity.GameStatus.CardData;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -48,4 +49,13 @@ public abstract class Card implements ICopy<Card> {
     public abstract int getLevelValue();
 
     public abstract Card getCopy();
+
+    public CardData asData() {
+        CardData data = new CardData();
+        data.setName(getName());
+        data.setDescription(getDescription());
+        data.setType(getType().ordinal());
+
+        return data;
+    }
 }

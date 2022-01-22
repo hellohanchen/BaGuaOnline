@@ -12,6 +12,9 @@ import com.hellohanchen.bagua.effects.auras.IAuraTarget;
 import com.hellohanchen.bagua.enums.CharacterAbility;
 import com.hellohanchen.bagua.enums.CharacterType;
 import com.hellohanchen.bagua.interfaces.ICarrier;
+import com.hellohanchen.baguaserver.entity.GameStatus;
+import com.hellohanchen.baguaserver.entity.GameStatus.CharacterData;
+import com.hellohanchen.baguaserver.entity.GameStatus.IntData;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -71,11 +74,19 @@ public abstract class Character extends GameObject implements IAuraTarget, ICarr
     public abstract CharacterDamage getDamage();
 
     public int getDamageValue() {
-        return getDamage().getCurrentValue();
+        return getDamage().getCurrentValue(this);
     }
 
     public int getDamageValue(GameObject target) {
         return getDamage().getCurrentValue(this, target);
+    }
+
+    public IntData getDamageData() {
+        int damage = getDamageValue();
+        return new IntData(
+                damage,
+                damage > getDamage().getOriginalValue(),
+                damage < getDamage().getOriginalValue());
     }
 
     public abstract CharacterHealth getHealth();
@@ -92,6 +103,14 @@ public abstract class Character extends GameObject implements IAuraTarget, ICarr
 
     public boolean isDamaged() {
         return getHealthValue() < getMaxHealthValue();
+    }
+
+    public IntData getHealthData() {
+        int health = getHealthValue();
+        return new IntData(
+                health,
+                health > getHealth().getOriginalValue(),
+                isDamaged());
     }
 
     public abstract DynamicInt getShield();
@@ -128,6 +147,18 @@ public abstract class Character extends GameObject implements IAuraTarget, ICarr
     @Override
     public Character asGameObject() {
         return this;
+    }
+
+    public CharacterData asData() {
+        return new CharacterData(
+                getPosition().ordinal(),
+                getId(),
+                getName(),
+                getDescription(),
+                hasAura(),
+                getDamageData(),
+                getShield().asData(),
+                getHealthData());
     }
 
     /* Setters */

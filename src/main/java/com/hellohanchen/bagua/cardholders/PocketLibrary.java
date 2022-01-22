@@ -92,6 +92,10 @@ public class PocketLibrary extends CardHolder {
         return cardLibrary.isEmpty();
     }
 
+    public int libraryCount() {
+        return cardLibrary.size();
+    }
+
     public List<IntTransform> getSpellDamageTransforms() {
         return effectiveAuras.getSpellDamageTransforms();
     }

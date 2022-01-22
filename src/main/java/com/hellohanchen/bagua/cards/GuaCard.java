@@ -6,6 +6,8 @@ import com.hellohanchen.bagua.exceptions.GameObjectException;
 import com.hellohanchen.bagua.guas.SingularGua;
 import com.hellohanchen.bagua.statics.CardFactory;
 import com.hellohanchen.bagua.statics.EffectFactory;
+import com.hellohanchen.baguaserver.entity.GameStatus;
+import com.hellohanchen.baguaserver.entity.GameStatus.CardData;
 import lombok.Getter;
 
 /**
@@ -56,5 +58,14 @@ public class GuaCard extends Card {
     @Override
     public GuaCard getCopy() {
         return new GuaCard(getGua());
+    }
+
+    @Override
+    public CardData asData() {
+        CardData data = super.asData();
+        data.setElement(getGua().getElement().ordinal());
+        data.setLevel(getGua().getLevel().asData());
+
+        return data;
     }
 }

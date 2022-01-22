@@ -1,6 +1,8 @@
 package com.hellohanchen.bagua.cards;
 
 import com.hellohanchen.bagua.exceptions.GameObjectException;
+import com.hellohanchen.baguaserver.entity.GameStatus;
+import com.hellohanchen.baguaserver.entity.GameStatus.CardData;
 import lombok.Getter;
 
 public class SpellCard extends Card {
@@ -36,5 +38,12 @@ public class SpellCard extends Card {
     @Override
     public SpellCard getCopy() {
         return new SpellCard(this.name, this.description, this.cardCode);
+    }
+
+    @Override
+    public CardData asData() {
+        CardData data = super.asData();
+        data.setCardCode(getCardCode());
+        return data;
     }
 }

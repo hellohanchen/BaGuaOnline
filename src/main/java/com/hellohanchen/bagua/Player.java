@@ -2,8 +2,10 @@ package com.hellohanchen.bagua;
 
 import com.hellohanchen.bagua.enums.TargetOwnerLogic;
 import com.hellohanchen.bagua.exceptions.GameProcessException;
+import lombok.Getter;
 
 public class Player {
+    @Getter
     private final String name;
     private Player opponent;
 

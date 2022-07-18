@@ -2,6 +2,7 @@ package com.hellohanchen.baguaserver.controller;
 
 import com.hellohanchen.bagua.GameManager;
 import com.hellohanchen.baguaserver.entity.PlayerId;
+import com.hellohanchen.baguaserver.game.GameManagerServer;
 import com.hellohanchen.baguaserver.repo.GameRepo;
 import com.hellohanchen.baguaserver.repo.PendingPlayerRepo;
 import com.hellohanchen.baguaserver.repo.PlayerGameRepo;
@@ -38,36 +39,44 @@ public class RequestController extends EzyLoggable {
 
     @EzyDoHandle(MATCH_GAME)
     public synchronized void match(MatchRequest request, EzyUser user) {
-        PlayerId p1 = new PlayerId(user.getName());
+        logger.info("BaGua Online - user {} start matching...", user.getName());
 
-        if (playerGames.findById(p1) != null) {
+        PlayerId player1 = new PlayerId(user.getName());
+
+        if (playerGames.findById(player1) != null) {
             responseInvalidRequest("A game is already running for user", user);
         } else {
 
-            pendingPlayers.save(p1);
+            pendingPlayers.save(player1);
 
             if (pendingPlayers.count() > 1) {
-                pendingPlayers.delete(p1);
-                PlayerId p2 = pendingPlayers.findAll(0, 1).get(0);
-                pendingPlayers.delete(p2);
+                pendingPlayers.delete(player1);
+                PlayerId player2 = pendingPlayers.findAll(0, 1).get(0);
+                pendingPlayers.delete(player2);
 
-                GameManager game = new GameManager(p1.userName(), p2.userName());
+                GameManagerServer game = new GameManagerServer(
+                        player1.userName(),
+                        player2.userName(),
+                        appResponseFactory);
+
                 games.save(game);
-                playerGames.add(p1, game.getId());
-                playerGames.add(p2, game.getId());
+                playerGames.add(player1, game.getId());
+                playerGames.add(player2, game.getId());
 
                 appResponseFactory.newObjectResponse()
                         .command(MATCH_GAME)
                         .param("gameId", game.getId())
                         .param("player", "1")
-                        .usernames(p1.userName())
+                        .usernames(player1.userName())
                         .execute();
                 appResponseFactory.newObjectResponse()
                         .command(MATCH_GAME)
                         .param("gameId", game.getId())
                         .param("player", "2")
-                        .usernames(p2.userName())
+                        .usernames(player2.userName())
                         .execute();
+
+                game.process();
             } else {
                 appResponseFactory.newObjectResponse()
                         .command(MATCH_GAME)

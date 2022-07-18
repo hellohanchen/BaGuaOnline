@@ -27,7 +27,7 @@ public class LoginController
 
     @Override
     public void handle(EzyPluginContext ctx, EzyUserLoginEvent event) {
-        logger.info("Space Game - user {} login in", event.getUsername());
+        logger.info("BaGua Online - user {} login in", event.getUsername());
         String player = event.getUsername();
         if (EzyStrings.isNoContent(player)) {
             throw new EzyLoginErrorException(EzyLoginError.INVALID_USERNAME);

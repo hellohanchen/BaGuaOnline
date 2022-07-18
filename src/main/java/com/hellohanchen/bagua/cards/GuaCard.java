@@ -63,7 +63,6 @@ public class GuaCard extends Card {
     @Override
     public CardData asData() {
         CardData data = super.asData();
-        data.setElement(getGua().getElement().ordinal());
         data.setLevel(getGua().getLevel().asData());
 
         return data;

@@ -6,8 +6,10 @@ import com.hellohanchen.bagua.cards.Card;
 import com.hellohanchen.bagua.dynamicints.inttransform.IntTransform;
 import com.hellohanchen.bagua.effects.auras.Aura;
 import com.hellohanchen.bagua.effects.auras.AuraHolder;
+import com.hellohanchen.bagua.enums.EventType;
 import com.hellohanchen.bagua.exceptions.GameProcessException;
 import com.hellohanchen.bagua.statics.GameUtils;
+import com.hellohanchen.baguaserver.entity.GameEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +41,7 @@ public class PocketLibrary extends CardHolder {
     public void addCardToPocket(Card card) {
         card.activate(gameManager, owner, pocketCount() + 1);
         cardPocket.add(card);
+        gameManager.addNewEvent(EventType.AddCard, this, card);
     }
 
     public void removeCardAt(int pos) {

@@ -55,6 +55,7 @@
     <orderEntry type="library" name="Maven: com.tvd12:ezyfox-common:1.2.1" level="project" />
     <orderEntry type="library" name="Maven: com.tvd12:ezyfox-security:1.2.1" level="project" />
     <orderEntry type="library" name="Maven: com.tvd12:ezyfox-concurrent:1.2.1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.projectlombok:lombok:1.18.24" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.junit.jupiter:junit-jupiter-engine:5.8.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.junit.platform:junit-platform-engine:1.8.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.apiguardian:apiguardian-api:1.1.2" level="project" />

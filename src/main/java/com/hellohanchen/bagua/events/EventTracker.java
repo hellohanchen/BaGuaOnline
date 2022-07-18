@@ -46,11 +46,10 @@ public class EventTracker {
             return;
         }
 
-        if (effectToEvents.containsKey(effectId)) {
-            effectToEvents.get(effectId).add(event);
-        } else {
-            effectToEvents.put(effectId, List.of(event));
+        if (!effectToEvents.containsKey(effectId)) {
+            effectToEvents.put(effectId, new ArrayList<>());
         }
+        effectToEvents.get(effectId).add(event);
     }
 
     public void addChildEffectToLast(List<Integer> childEffects) {

@@ -11,6 +11,7 @@ public enum EventType {
     GameStart,
     Heal,
     Summon,
+    AddCard,
     UseCard,
     UseAbility,
     RoundStart,

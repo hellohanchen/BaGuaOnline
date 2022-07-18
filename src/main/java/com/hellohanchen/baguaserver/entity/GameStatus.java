@@ -1,9 +1,15 @@
 package com.hellohanchen.baguaserver.entity;
 
 import com.hellohanchen.bagua.GameManager;
+import com.hellohanchen.bagua.cards.Card;
+import com.hellohanchen.bagua.cards.GuaCard;
 import com.hellohanchen.baguaserver.response.GameStatusResponse;
 import com.tvd12.ezyfox.binding.annotation.EzyObjectBinding;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +51,7 @@ public class GameStatus {
 
     @Getter
     @Setter
+    @Builder
     @EzyObjectBinding
     @AllArgsConstructor
     @NoArgsConstructor
@@ -57,9 +64,26 @@ public class GameStatus {
         @Builder.Default
         private int cardCode = -1;
 
-        @Builder.Default
-        private int element = -1;
         private IntData level;
+
+        public static CardData fromCard(Card card) {
+            CardDataBuilder builder =  CardData.builder()
+                    .type(card.getType().ordinal())
+                    .name(card.getName())
+                    .description(card.getDescription())
+                    .positionInPocket(card.getPositionInPocket())
+                    .cardCode(card.getCardCode());
+
+            if (card instanceof GuaCard guaCard) {
+                builder.level(new IntData(
+                        guaCard.getLevelValue(),
+                        guaCard.getGua().getLevel().isEnhanced(),
+                        guaCard.getGua().getLevel().isImpaired()
+                ));
+            }
+
+            return builder.build();
+        }
     }
 
     @Getter
@@ -81,6 +105,7 @@ public class GameStatus {
 
     @Getter
     @Setter
+    @Builder
     @EzyObjectBinding
     @AllArgsConstructor
     @NoArgsConstructor

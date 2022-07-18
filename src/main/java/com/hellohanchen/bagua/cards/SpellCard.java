@@ -39,11 +39,4 @@ public class SpellCard extends Card {
     public SpellCard getCopy() {
         return new SpellCard(this.name, this.description, this.cardCode);
     }
-
-    @Override
-    public CardData asData() {
-        CardData data = super.asData();
-        data.setCardCode(getCardCode());
-        return data;
-    }
 }

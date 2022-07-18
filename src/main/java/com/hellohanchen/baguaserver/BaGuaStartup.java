@@ -29,18 +29,28 @@ public class BaGuaStartup {
                 .name(APP_NAME)
                 .entryLoader(BaGuaGameAppEntryLoader.class);
 
+        EzySimpleUserManagementSetting userManagementSetting = new EzyUserManagementSettingBuilder()
+                .allowChangeSession(true) // allow change user's session, default true
+                .maxSessionPerUser(5) // set number of max sessions per user // default 5
+                .userMaxIdleTimeInSecond(999) // set max idle time of a user, default 0
+                .userNamePattern("^[a-z0-9_.]{3,36}$") // set username pattern, default ^[a-z0-9_.]{3,36}$
+                .build();
+
         EzyZoneSettingBuilder zoneSettingBuilder = new EzyZoneSettingBuilder()
                 .name(ZONE_NAME)
                 .application(appSettingBuilder.build())
+                .userManagement(userManagementSetting)
                 .plugin(pluginSettingBuilder.build());
 
         EzyWebSocketSettingBuilder webSocketSettingBuilder = new EzyWebSocketSettingBuilder()
-                .active(false);
+                .active(true);
 
         EzyUdpSettingBuilder udpSettingBuilder = new EzyUdpSettingBuilder()
                 .active(true);
 
         EzySessionManagementSettingBuilder sessionManagementSettingBuilder = new EzySessionManagementSettingBuilder()
+                .sessionMaxWaitingTimeInSecond(999)
+                .sessionMaxIdleTimeInSecond(999)
                 .sessionMaxRequestPerSecond(
                         new EzySessionManagementSettingBuilder.EzyMaxRequestPerSecondBuilder()
                                 .value(250)

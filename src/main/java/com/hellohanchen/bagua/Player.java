@@ -7,10 +7,13 @@ import lombok.Getter;
 public class Player {
     @Getter
     private final String name;
+    @Getter
+    private final int id;
     private Player opponent;
 
-    public Player(String name) {
+    public Player(String name, int id) {
         this.name = name;
+        this.id = id;
     }
 
     public Player applyTargetLogic(TargetOwnerLogic targetOwnerLogic) {
